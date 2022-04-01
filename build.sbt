@@ -6,15 +6,16 @@ val kafkaVersion = "3.1.0"
 
 val springVersion = "2.6.5"
 
-val swaggerVersion = "3.0.0"
-
-// kafka-clients
+val swaggerVersion = "2.9.2"
 
 libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter-web" % springVersion,
   "org.apache.kafka" % "kafka-clients" % kafkaVersion,
   "io.springfox" % "springfox-swagger-ui" % swaggerVersion,
-  "io.springfox" % "springfox-swagger2" % swaggerVersion
+  "io.springfox" % "springfox-swagger2" % swaggerVersion,
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.13.2",
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.13.2"
+
 )
 
 

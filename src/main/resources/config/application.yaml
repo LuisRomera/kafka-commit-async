@@ -1,7 +1,9 @@
 server:
-  port: 9000
+  port: 9002
 spring:
   name: "Wake-Up"
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+kafka:
+  path: "src/main/resources/kafka/"
