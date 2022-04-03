@@ -1,4 +1,9 @@
-country: US
-state:
-  - TX
-  - VA
+name: localhostA
+bootstrapServer: localhost:29092
+serdes:
+  serializer:
+    key: org.apache.kafka.common.serialization.StringSerializer
+    value: org.apache.kafka.common.serialization.StringSerializer
+  deserializer:
+    key: org.apache.kafka.common.serialization.StringDeserializer
+    value: org.apache.kafka.common.serialization.StringDeserializer

@@ -1,9 +1,13 @@
+app:
+  name: "kafka-commit-async"
 server:
   port: 9002
 spring:
-  name: "Wake-Up"
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
 kafka:
-  path: "src/main/resources/kafka/"
+  bootstrapServers:
+    -
+      name: "local"
+      bootstrap.servers: "localhost:29092"

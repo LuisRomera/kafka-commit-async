@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   "org.apache.kafka" % "kafka-clients" % kafkaVersion,
   "io.springfox" % "springfox-swagger-ui" % swaggerVersion,
   "io.springfox" % "springfox-swagger2" % swaggerVersion,
+
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.13.2",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.13.2"
 
