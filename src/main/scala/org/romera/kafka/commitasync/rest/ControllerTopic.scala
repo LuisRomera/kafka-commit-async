@@ -9,7 +9,7 @@ import org.springframework.core.env.Environment
 import org.springframework.web.bind.annotation.{PathVariable, RequestMapping, RequestMethod, RequestParam, RestController}
 
 @RestController
-class Controller @Autowired()(environment: Environment, producer: Producer, fileKafkaConfig: FileKafkaConfig) {
+class ControllerTopic @Autowired()(environment: Environment, producer: Producer, fileKafkaConfig: FileKafkaConfig) {
 
   @RequestMapping(value = Array("/createTopic"), method = Array(RequestMethod.GET))
   def createTopic(@RequestParam("server") server: String, @RequestParam("topic") topic: String,
@@ -30,11 +30,11 @@ class Controller @Autowired()(environment: Environment, producer: Producer, file
 
   @RequestMapping(value = Array("/listTopic"), method = Array(RequestMethod.GET))
   def propertiesListTopic(@RequestParam("server") server: String): String = {
-    producer.getTopicsList(server).toString()
+    producer.getTopicsList(server)
   }
 
   @RequestMapping(value = Array("/listPrefixTopic"), method = Array(RequestMethod.GET))
   def propertiesListTopicPrefix(@RequestParam("server") server: String, @RequestParam("prefix") prefix: String): String = {
-    producer.getTopicsList(server, prefix).toString()
+    producer.getTopicsList(server, prefix)
   }
 }

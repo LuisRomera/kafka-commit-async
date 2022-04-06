@@ -3,6 +3,7 @@ package org.romera.kafka.commitasync.config
 import org.apache.kafka.clients.admin.{Admin, NewTopic}
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.errors.TimeoutException
+import org.romera.kafka.commitasync.kafka.{KafakaConfig, Topic}
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -16,8 +17,7 @@ import java.util
 import java.util.{Collections, Properties, ArrayList => JArrayList, List => JList, Map => JMap}
 import scala.beans.BeanProperty
 import scala.collection.convert.ImplicitConversions.{`collection AsScalaIterable`, `collection asJava`}
-import scala.collection.JavaConverters._
-import scala.collection.mutable.ListBuffer
+
 
 
 @Component
@@ -29,9 +29,6 @@ class FileKafkaConfig @Autowired()(env: Environment) {
   @BeanProperty
   var bootstrapServers: JList[JMap[String, String]] = new JArrayList[JMap[String, String]]
 
-  case class Topic(name: String, partitions: Int)
-
-  case class KafakaConfig(name: String, properties: Properties, topic: Topic, topicList: List[Topic])
 
   var kafkaServer: List[KafakaConfig] = _
 

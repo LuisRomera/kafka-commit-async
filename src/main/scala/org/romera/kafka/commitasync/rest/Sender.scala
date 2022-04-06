@@ -12,7 +12,7 @@ class Sender @Autowired()(env: Environment, producer: Producer, fileKafkaConfig:
 
   @RequestMapping(value = Array("/sendString"), method = Array(RequestMethod.POST))
   def sendString(@PathVariable topic: String, @PathVariable message: String, @PathVariable nameBroker: String): Unit = {
-    producer.createProducer(topic, nameBroker, message)
+//    producer.createProducer(topic, nameBroker, message)
     LoggerFactory.getLogger(this.getClass).info(env.getProperty("app.name"))
 
   }

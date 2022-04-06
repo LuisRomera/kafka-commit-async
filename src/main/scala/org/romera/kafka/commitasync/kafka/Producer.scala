@@ -1,7 +1,9 @@
 package org.romera.kafka.commitasync.kafka
 
+import com.google.gson.{Gson, GsonBuilder}
 import org.apache.kafka.clients.admin.{Admin, NewTopic}
 import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.common.PartitionInfo
 import org.romera.kafka.commitasync.config.FileKafkaConfig
 import org.romera.kafka.commitasync.kafka.Constants.{CREATE_TOPIC, DELETE_TOPIC}
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,17 +11,17 @@ import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
 
 import java.time.Duration
+import java.util
 import java.util.Collections
 
 @Service
 class Producer()(@Autowired fileKafkaConfig: FileKafkaConfig, environment: Environment) {
 
-  def createProducer(topic: String, nameBroker: String, message: String): Unit = {
+  val gson = new GsonBuilder().setPrettyPrinting().create()
 
-  }
 
   def managerTopic(env: String, topic: String, partition: Int, replicationFactor: Short, operation: String): Unit = {
-    val kafkaEnv = fileKafkaConfig.kafkaServer.filter(r => r.name.equals(env)).head
+    val kafkaEnv = getKafkaServerProperties(env)
     val admin = Admin.create(kafkaEnv.properties)
     val newTopic = new NewTopic(topic, partition, replicationFactor);
     operation match {
@@ -30,30 +32,36 @@ class Producer()(@Autowired fileKafkaConfig: FileKafkaConfig, environment: Envir
   }
 
   def propertiesTopic(env: String, topic: String): String = {
-    val kafkaEnv = fileKafkaConfig.kafkaServer.filter(r => r.name.equals(env)).head
-    val consumer = new KafkaConsumer[String, String](kafkaEnv.properties)
-    val mapTopic = consumer.listTopics(Duration.ofMillis(1000L))
+    val consumer = getConsumerStringString(env)
+    val mapTopic = getTopics(consumer)
     consumer.close()
     mapTopic.get(topic).toString
   }
 
   case class Topic(name: String, partitions: Int)
 
-  def getTopicsList(env: String): List[String] = {
-    val kafkaEnv = fileKafkaConfig.kafkaServer.filter(r => r.name.equals(env)).head
-    val consumer = new KafkaConsumer[String, String](kafkaEnv.properties)
-    val mapTopic = consumer.listTopics(Duration.ofMillis(1000L))
+  def getTopicsList(env: String): String = {
+    val consumer = getConsumerStringString(env)
+    val mapTopic = getTopics(consumer)
     consumer.close()
-    mapTopic.keySet().toArray.toList.map(t => s"topicName: ${t}, properties: ${mapTopic.get(t).toString}")
+    gson.toJson(mapTopic.keySet().toArray)
   }
 
-  def getTopicsList(env: String, prefix: String): List[String] = {
-    val kafkaEnv = fileKafkaConfig.kafkaServer.filter(r => r.name.equals(env)).head
-    val consumer = new KafkaConsumer[String, String](kafkaEnv.properties)
-    val mapTopic = consumer.listTopics(Duration.ofMillis(1000L))
+  def getTopicsList(env: String, prefix: String): String = {
+    val consumer = getConsumerStringString(env)
+    val mapTopic = getTopics(consumer)
     consumer.close()
-    mapTopic.keySet().toArray.toList
+    gson.toJson(mapTopic.keySet().toArray.toList
       .filter(t => t.toString.contains(prefix))
-      .map(t => s"${t}")
+      .map(t => s"${t}"))
   }
+
+  def getKafkaServerProperties(name: String): KafakaConfig =
+    fileKafkaConfig.kafkaServer.filter(r => r.name.equals(name)).head
+
+  def getConsumerStringString(name: String): KafkaConsumer[String, String] =
+    new KafkaConsumer[String, String](getKafkaServerProperties(name).properties)
+
+  def getTopics(consumer: KafkaConsumer[String, String]): util.Map[String, util.List[PartitionInfo]] =
+    consumer.listTopics(Duration.ofMillis(1000L))
 }
