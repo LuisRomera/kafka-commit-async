@@ -8,14 +8,18 @@ val springVersion = "2.6.5"
 
 val swaggerVersion = "2.9.2"
 
+val jacksonVersion = "2.13.2"
+
+val gsonVersion = "2.9.0"
+
 libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter-web" % springVersion,
   "org.apache.kafka" % "kafka-clients" % kafkaVersion,
   "io.springfox" % "springfox-swagger-ui" % swaggerVersion,
   "io.springfox" % "springfox-swagger2" % swaggerVersion,
-  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.13.2",
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.13.2",
-  "com.google.code.gson" % "gson" % "2.9.0"
+  "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % jacksonVersion,
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
+  "com.google.code.gson" % "gson" % gsonVersion
 )
 
 
