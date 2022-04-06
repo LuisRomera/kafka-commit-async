@@ -36,4 +36,24 @@ class Producer()(@Autowired fileKafkaConfig: FileKafkaConfig, environment: Envir
     consumer.close()
     mapTopic.get(topic).toString
   }
+
+  case class Topic(name: String, partitions: Int)
+
+  def getTopicsList(env: String): List[String] = {
+    val kafkaEnv = fileKafkaConfig.kafkaServer.filter(r => r.name.equals(env)).head
+    val consumer = new KafkaConsumer[String, String](kafkaEnv.properties)
+    val mapTopic = consumer.listTopics(Duration.ofMillis(1000L))
+    consumer.close()
+    mapTopic.keySet().toArray.toList.map(t => s"topicName: ${t}, properties: ${mapTopic.get(t).toString}")
+  }
+
+  def getTopicsList(env: String, prefix: String): List[String] = {
+    val kafkaEnv = fileKafkaConfig.kafkaServer.filter(r => r.name.equals(env)).head
+    val consumer = new KafkaConsumer[String, String](kafkaEnv.properties)
+    val mapTopic = consumer.listTopics(Duration.ofMillis(1000L))
+    consumer.close()
+    mapTopic.keySet().toArray.toList
+      .filter(t => t.toString.contains(prefix))
+      .map(t => s"${t}")
+  }
 }

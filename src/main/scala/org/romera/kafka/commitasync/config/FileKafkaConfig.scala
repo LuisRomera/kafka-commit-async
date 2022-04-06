@@ -48,16 +48,12 @@ class FileKafkaConfig @Autowired()(env: Environment) {
     var topicList: List[Topic] = List()
     try {
       val mapTopic = consumer.listTopics(Duration.ofMillis(1000L))
-      topicList = mapTopic.keySet().toArray.map(key => Topic(key.toString, consumer.listTopics().get("nuevo").size())).toList
+      topicList = mapTopic.keySet().toArray.map(key => Topic(key.toString, consumer.listTopics().size())).toList
     } catch {
       case ex: TimeoutException => log.warn(s"No connection kafka ${bootstrapServer}")
     }
-
-
     val config = KafakaConfig(bootstrapServer.get("name"), properties, null, topicList)
     consumer.close()
-
-
     config
   }
 

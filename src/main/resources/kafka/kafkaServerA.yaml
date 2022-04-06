@@ -1,5 +1,5 @@
 name: localhostA
-bootstrapServer: localhost:29092
+bootstrapServer: localhost:9092
 serdes:
   serializer:
     key: org.apache.kafka.common.serialization.StringSerializer
