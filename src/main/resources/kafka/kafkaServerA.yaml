@@ -1,9 +1,0 @@
-name: localhostA
-bootstrapServer: localhost:9092
-serdes:
-  serializer:
-    key: org.apache.kafka.common.serialization.StringSerializer
-    value: org.apache.kafka.common.serialization.StringSerializer
-  deserializer:
-    key: org.apache.kafka.common.serialization.StringDeserializer
-    value: org.apache.kafka.common.serialization.StringDeserializer
