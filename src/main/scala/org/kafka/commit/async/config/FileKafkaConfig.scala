@@ -52,6 +52,8 @@ class FileKafkaConfig @Autowired()(env: Environment) {
     } catch {
       case ex: TimeoutException => log.warn(s"No connection kafka ${bootstrapServer}")
     }
+    properties.remove("key.deserializer")
+    properties.remove("value.deserializer")
     val config = KafakaConfig(bootstrapServer.get("name"), properties, null, topicList)
     consumer.close()
     config

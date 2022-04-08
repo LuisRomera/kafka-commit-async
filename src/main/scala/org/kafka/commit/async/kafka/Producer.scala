@@ -2,6 +2,7 @@ package org.kafka.commit.async.kafka
 
 import org.apache.kafka.clients.admin.{Admin, NewTopic}
 import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
 import org.kafka.commit.async.config.FileKafkaConfig
 import org.kafka.commit.async.kafka.Constants.{CREATE_TOPIC, DELETE_TOPIC}
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,9 +15,26 @@ import java.util.Collections
 @Service
 class Producer()(@Autowired fileKafkaConfig: FileKafkaConfig, environment: Environment) {
 
-  def createProducer(topic: String, nameBroker: String, message: String): Unit = {
+  def createProducer(env: String, topic: String, nameBroker: String, key: String, message: String, keyS: String,
+                     value: String): Unit = {
+    val kafkaEnv = fileKafkaConfig.kafkaServer.filter(r => r.name.equals(env)).head
 
+    val prop = kafkaEnv.properties
+    val keySerde = getSerde(keyS)
+    val valueSerde = getSerde(value)
+    prop.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, keySerde)
+    prop.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, valueSerde)
+
+    val producer = new KafkaProducer[String, String](prop)
+    producer.send(new ProducerRecord(topic, key, message))
+    producer.close()
   }
+def getSerde(serde: String): String = serde match {
+  case "STRING" => "org.apache.kafka.common.serialization.StringSerializer"
+  case "LONG" => "org.apache.kafka.common.serialization.LongSerializer"
+  case "AVRO_HORTONWORKS" => "org.apache.kafka.common.serialization.LongSerializer"
+}
+
 
   def managerTopic(env: String, topic: String, partition: Int, replicationFactor: Short, operation: String): Unit = {
     val kafkaEnv = fileKafkaConfig.kafkaServer.filter(r => r.name.equals(env)).head
@@ -36,6 +54,8 @@ class Producer()(@Autowired fileKafkaConfig: FileKafkaConfig, environment: Envir
     consumer.close()
     mapTopic.get(topic).toString
   }
+
+
 
   case class Topic(name: String, partitions: Int)
 

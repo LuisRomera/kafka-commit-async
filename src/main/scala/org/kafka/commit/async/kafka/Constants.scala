@@ -12,4 +12,6 @@ object Constants {
 
   val DELETE_TOPIC: String = "DELETE_TOPIC"
 
+  final val SERDES: String = "STRING,LONG,AVRO_HORTONWORKS"
+
 }

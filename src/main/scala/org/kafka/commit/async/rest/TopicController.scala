@@ -9,7 +9,7 @@ import org.springframework.core.env.Environment
 import org.springframework.web.bind.annotation.{PathVariable, RequestMapping, RequestMethod, RequestParam, RestController}
 
 @RestController
-class Controller @Autowired()(environment: Environment, producer: Producer, fileKafkaConfig: FileKafkaConfig) {
+class TopicController @Autowired()(environment: Environment, producer: Producer, fileKafkaConfig: FileKafkaConfig) {
 
   @RequestMapping(value = Array("/createTopic"), method = Array(RequestMethod.GET))
   def createTopic(@RequestParam("server") server: String, @RequestParam("topic") topic: String,

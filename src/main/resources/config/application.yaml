@@ -2,6 +2,8 @@ app:
   name: "kafka-commit-async"
 server:
   port: 9002
+swagger:
+  url: "http://localhost:9002/swagger-ui.html"
 spring:
   mvc:
     pathmatch:
@@ -10,5 +12,5 @@ kafka:
   bootstrapServers:
     -
       name: "local"
-      bootstrap.servers: "localhost:29092"
-#      bootstrap.servers: "172.25.0.5:9095,172.25.0.3:9094,172.25.0.4:9093"
+#      bootstrap.servers: "localhost:29092"
+      bootstrap.servers: "172.25.0.5:9093,172.25.0.3:9094,172.25.0.4:9095"

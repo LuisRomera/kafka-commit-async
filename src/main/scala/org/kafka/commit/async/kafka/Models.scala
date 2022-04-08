@@ -1,4 +1,4 @@
-package org.romera.kafka.commitasync.kafka
+package org.kafka.commit.async.kafka
 
 import java.util.Properties
 
